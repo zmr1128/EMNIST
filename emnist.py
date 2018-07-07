@@ -2,91 +2,91 @@
 
 # imports
 import numpy as np
-# import scipy.io as sio
+import scipy.io as sio
 import math
 from matplotlib import pyplot as plt
-# import cv2
+import cv2
 import tensorflow as tf
-#
-# # load data
-# data = sio.loadmat('Data/emnist-byclass.mat')
-#
-# # # preprocessing and obtaining training and testing data and labels
-#
-# # height and width of each image
-# h =28
-# w = 28
-#
-# # no. of training and testing samples
-# len_tr = len(data['dataset'][0][0][0][0][0][0])
-# len_ts = len(data['dataset'][0][0][1][0][0][0])
-#
-# # extracting data and reshaping images as per our requirements
-# X_train = data['dataset'][0][0][0][0][0][0].reshape(len_tr,h,w,1)
-# y_train = data['dataset'][0][0][0][0][0][1]
-#
-# X_test = data['dataset'][0][0][1][0][0][0].reshape(len_ts,h,w,1)
-# y_test = data['dataset'][0][0][1][0][0][1]
-#
-# # print(X_train[0].shape)
-#
-# # function to rotate images (images in the dataset are flipped and rotated)
-# def rotate(image):
-#     flip = np.fliplr(image)
-#     out = np.rot90(flip)
-#     return out
-#
-# # rotate all images to actual orientation
-# for i in range(len_tr):
-#     X_train[i] = rotate(X_train[i])
-#
-# for j in range(len_ts):
-#     X_test[j] = rotate(X_test[j])
-#
-# # verifying and checking samples
-# # test = X_test[1809]
-# # print(y_test[1809])
-# # cv2.imshow('test',test)
-# # cv2.waitKey(0)
-#
-# # convert data to float32 and labels to int32
-# X_train = X_train.astype('float32')
-# X_test = X_test.astype('float32')
-# y_train = y_train.astype('int32')
-# y_test = y_test.astype('int32')
-#
-# # standardize
-# X_train/= 255
-# X_test/= 255
-# try normalization too later
-#
-# # transpose y to get a row of labels and squeeze to one list
-# y_train = y_train.reshape(1,len_tr)[0]
-# y_test = y_test.reshape(1,len_ts)[0]
-#
-# # function for one hot encoding
-# def one_hot(y, indices = 62):
-#     tot = len(y)
-#     out = np.zeros((tot,indices))
-#     out[np.arange(tot),y] = 1
-#     return out
-#
-# # one hot to train and test labels
-# yoh_train = one_hot(y_train)
-# yoh_test = one_hot(y_test)
-# # verifying
-# print(yoh_train.shape)
-# print(yoh_test.shape)
-# # print(yoh_train[:5])
-# # print(yoh_test[:5])
-# # print(y_train[:5])
-# # print(y_test[:5])
-#
-# # Save all of the preprocessed X and y data for later use
-# np.savez('Data/AllData.npy',
-#     X_train = X_train, X_test = X_test,
-#     y_train = y_train, y_test = y_test,
-#     yoh_train = yoh_train, yoh_test = yoh_test)
+
+# load data
+data = sio.loadmat('Data/emnist-byclass.mat')
+
+# # preprocessing and obtaining training and testing data and labels
+
+# height and width of each image
+h =28
+w = 28
+
+# no. of training and testing samples
+len_tr = len(data['dataset'][0][0][0][0][0][0])
+len_ts = len(data['dataset'][0][0][1][0][0][0])
+
+# extracting data and reshaping images as per our requirements
+X_train = data['dataset'][0][0][0][0][0][0].reshape(len_tr,h,w,1)
+y_train = data['dataset'][0][0][0][0][0][1]
+
+X_test = data['dataset'][0][0][1][0][0][0].reshape(len_ts,h,w,1)
+y_test = data['dataset'][0][0][1][0][0][1]
+
+# print(X_train[0].shape)
+
+# function to rotate images (images in the dataset are flipped and rotated)
+def rotate(image):
+    flip = np.fliplr(image)
+    out = np.rot90(flip)
+    return out
+
+# rotate all images to actual orientation
+for i in range(len_tr):
+    X_train[i] = rotate(X_train[i])
+
+for j in range(len_ts):
+    X_test[j] = rotate(X_test[j])
+
+# verifying and checking samples
+# test = X_test[1809]
+# print(y_test[1809])
+# cv2.imshow('test',test)
+# cv2.waitKey(0)
+
+# convert data to float32 and labels to int32
+X_train = X_train.astype('float32')
+X_test = X_test.astype('float32')
+y_train = y_train.astype('int32')
+y_test = y_test.astype('int32')
+
+# standardize
+X_train/= 255
+X_test/= 255
+try normalization too later
+
+# transpose y to get a row of labels and squeeze to one list
+y_train = y_train.reshape(1,len_tr)[0]
+y_test = y_test.reshape(1,len_ts)[0]
+
+# function for one hot encoding
+def one_hot(y, indices = 62):
+    tot = len(y)
+    out = np.zeros((tot,indices))
+    out[np.arange(tot),y] = 1
+    return out
+
+# one hot to train and test labels
+yoh_train = one_hot(y_train)
+yoh_test = one_hot(y_test)
+# verifying
+print(yoh_train.shape)
+print(yoh_test.shape)
+# print(yoh_train[:5])
+# print(yoh_test[:5])
+# print(y_train[:5])
+# print(y_test[:5])
+
+# Save all of the preprocessed X and y data for later use
+np.savez('Data/AllData.npy',
+    X_train = X_train, X_test = X_test,
+    y_train = y_train, y_test = y_test,
+    yoh_train = yoh_train, yoh_test = yoh_test)
 
 # Let the magic begin!
 # Load preprocessed data
@@ -281,9 +281,9 @@ plt.xlabel('iteration (tens)')
 plt.title('loss curve')
 plt.show()
 
-# # Test Accuracy
-# print('Testing Accuracy %g'%accuracy.eval(
-#     feed_dict = {X:X_test,y:y_test, keep_prob:1.0}))
+# Test Accuracy
+print('Testing Accuracy %g'%accuracy.eval(
+    feed_dict = {X:X_test,y:y_test, keep_prob:1.0}))
 
 # end session
 sess.close()
