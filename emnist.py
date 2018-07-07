@@ -58,7 +58,7 @@ y_test = y_test.astype('int32')
 # standardize
 X_train/= 255
 X_test/= 255
-try normalization too later
+# try normalization too later
 
 # transpose y to get a row of labels and squeeze to one list
 y_train = y_train.reshape(1,len_tr)[0]
@@ -259,6 +259,7 @@ for i in range(iter):
     # iterating over all minibatches
     for minibatch in minibatches:
         (X_mb,y_mb) = minibatch
+
         # evaluate loss for current iteration (SLIGHTLY UNSURE ABOUT WHATS HAPPENING HERE)
         _,temp_loss = sess.run([optimizer,cross_entropy],
             feed_dict = {X:X_mb,y:y_mb,keep_prob:drop_prob})
